@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "$(tty)" == "not a tty" ]; then kill -9 $PPID; fi
+if [ "-" != "$PS3" ];
+then
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		kill -9 $PPID
+	fi
+fi
