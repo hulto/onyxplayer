@@ -23,6 +23,10 @@ iptables -t mangle -A INPUT -p TCP --dport 22 -j ACCEPT
 # HTTP Server
 iptables -t mangle -A INPUT -p TCP --dport 80 -j ACCEPT
 
+# DROP everything else
+iptables -t mangle -A INPUT -j DROP
+iptables -t mangle -A OUTPUT -j DROP
+
 # Uncomment for testing
-sleep 10
+sleep 100
 iptables -t mangle -F
