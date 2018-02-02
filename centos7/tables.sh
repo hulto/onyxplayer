@@ -24,5 +24,5 @@ iptables -t mangle -A INPUT -p TCP --dport 22 -j ACCEPT
 iptables -t mangle -A INPUT -p TCP --dport 9200:9300 -j ACCEPT
 
 # Uncomment for testing
-sleep 10
-iptables -t mangle -F
+# sleep 10
+# iptables -t mangle -F
