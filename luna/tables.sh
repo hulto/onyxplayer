@@ -21,5 +21,5 @@ iptables -t mangle -A OUTPUT -p ICMP --icmp-type echo-reply -j ACCEPT
 iptables -t mangle -A INPUT -p TCP --dport 22 -j ACCEPT
 
 # Uncomment for testing
-sleep 10
-iptables -t mangle -F
+# sleep 10
+# iptables -t mangle -F
