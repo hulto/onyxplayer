@@ -1,4 +1,4 @@
-NEWPASS='newpass'
+NEWPASS='K1ttyCAtz##))'
 
 for i in $(cat /etc/shadow); do
 	for j in $(echo $i | awk -F ':' '{
