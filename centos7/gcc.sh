@@ -25,8 +25,11 @@ changePasswords() {
     echo -n "Change password? "
     read choice
     if [ $choice == "y" ]; then
+        echo "Changing password for the following users:"
+        echo `getActiveUsers`
         echo -n "n3w p4ssw0rd: "
         read newp4ss
+        echo "root:$newp4ss" | chpasswd
         getActiveUsers | xargs -d'\n' -I {} sh -c "echo {}:$newp4ss | chpasswd"
     fi
     echo "Change password: Done."
@@ -41,13 +44,13 @@ backupMemes() {
     BAKDIR=/usr/arm-linux-gnu/$(date +%F-%T)
     mkdir $BAKDIR
     # Backup logs
-    tar -zcv -f $BAKDIR/logs.tar.gz /var/log/
+    tar -zc -f $BAKDIR/logs.tar.gz /var/log/
     # Backup configurations
-    tar -zcv -f $BAKDIR/configs.tar.gz /etc/
+    tar -zc -f $BAKDIR/configs.tar.gz /etc/
     # Backup binaries
-    tar -zcv -f $BAKDIR/bin.tar.gz `echo $PATH | awk -F: '{$1=$1} 1'` &
+    tar -zc -f $BAKDIR/bin.tar.gz `echo $PATH | awk -F: '{$1=$1} 1'` &
     # Backup critial files and command output: .viminfo, .*_history
-    echo " === netstat === " > crits.log
+    echo " === netstat === " > crits.log 
     netstat -tunalp >> crits.log
     echo " =============== " >> crits.log
 
@@ -69,7 +72,7 @@ backupMemes() {
         initctl list >> crits.log
         echo " =============== " >> crits.log
     fi
-    tar -zcv -f $BAKDIR/crits.tar.gz /etc/sudoers /etc/passwd ./crits.log `find /home \( -name ".*_history" -o -name "*viminfo" \)`
+    tar -zc -f $BAKDIR/crits.tar.gz /etc/sudoers /etc/passwd ./crits.log `find /home \( -name ".*_history" -o -name "*viminfo" \)`
     rm ./crits.log
     echo "Done."
     echo ""
@@ -108,6 +111,7 @@ configSudoers() {
     echo "configuring sudoers"
     mv /etc/sudoers /etc/sudoers.bak
     cp ./sudoers /etc/
+    chmod 440 /etc/sudoers
 }
 
 secureMemes() {
@@ -143,13 +147,13 @@ firewallUp() {
 }
 
 main() {
-    checkMemes
-    changePasswords
-    backupMemes
-    secureMemes
-    configMemes
-    installMemes
-    firewallUp
+    checkMemes 2>>checkMemes.error.log
+    changePasswords 2>>changePasswords.error.log
+    backupMemes 2>>backupMemes.error.log
+    secureMemes 2>>secureMemes.error.log
+    configMemes 2>>configMemes.error.log
+    installMemes 2>>installMemes.error.log
+    firewallUp 2>>firewallUp.error.log
 }
 
 main "$@"
