@@ -1,4 +1,5 @@
 #!/bin/bash
+# Exclude lightdm and xorg while protecting logs
 
 checkMemes() {
     lst=('service' 'systemctl' 'initctl' 'tar' 'netstat' 'lsmod' 'apt-get' 'yum' 'date')
@@ -124,7 +125,7 @@ secureMemes() {
 
 secureLogs() {
     echo "securing logs"
-    chattr +a -R /var/log/*
+    find /var/log/* | grep -v "lightdm" | grep -v "Xorg.*.log*" | xargs -d'\n' -I {} chattr +a -R {}
 }
 
 installMemes() {
