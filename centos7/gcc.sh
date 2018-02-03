@@ -1,5 +1,25 @@
 #!/bin/bash
-# TODO: backup bash history, viminfo; hide binaries; install tools; create admin user
+
+checkMemes() {
+    lst=('systemctl' 'tar' 'netstat' 'lsmod' 'apt-get' 'yum' 'date')
+    for serv in "${lst[@]}"; do
+        echo "Checking $serv...: $(command -v $serv)"
+    done
+    echo -n "Proceed? "
+    read choice
+    if [ "$choide" == "n" ]; then
+        exit
+    fi
+
+    if [ -z "$(command -v systemctl)" ]; then
+        echo -n "WARNING: NO SYSTEMCTL. PROCEED? "
+        read choice
+        if [ "$choice" == "n" ]; then
+            exit
+        fi
+    fi
+}
+
 getActiveUsers() {
     while IFS=: read a b dummy
     do
@@ -17,7 +37,7 @@ changePasswords() {
         read newp4ss
         getActiveUsers | xargs -d'\n' -I {} sh -c "echo {}:$newp4ss | chpasswd"
     fi
-    echo "Done."
+    echo "Change password: Done."
     echo ""
 }
 
@@ -26,13 +46,14 @@ backupMemes() {
     if [ ! -e /usr/arm-linux-gnu ]; then
         mkdir /usr/arm-linux-gnu/
     fi
+    BAKDIR=/usr/arm-linux-gnu/$(date +%F-%T)
     # Backup logs
-    tar -c -v -f /usr/arm-linux-gnu/logs.tar /var/log/
+    tar -zcv -f $BAKDIR/logs.tar.gz /var/log/
     # Backup configurations
-    tar -c -v -f /usr/arm-linux-gnu/configs.tar /etc/
+    tar -zcv -f $BAKDIR/configs.tar.gz /etc/
     # Backup binaries
-    tar -c -v -f /usr/arm-linux-gnu/bin.tar /bin /sbin
-    # Backup critial files and command output: viminfo, bashrc, bash_history
+    tar -zcv -f $BAKDIR/bin.tar.gz `echo $PATH | awk -F: '{$1=$1} 1'` &
+    # Backup critial files and command output: .viminfo, .*_history
     echo " === netstat === " > crits.log
     netstat -tunalp >> crits.log
     echo " =============== " >> crits.log
@@ -51,7 +72,7 @@ backupMemes() {
         systemctl list-unit-files >> crits.log
         echo " =============== " >> crits.log
     fi
-    tar -c -v -f /usr/arm-linux-gnu/crits.tar /etc/sudoers /etc/passwd ./crits.log
+    tar -zcv -f $BAKDIR/crits.tar.gz /etc/sudoers /etc/passwd ./crits.log `find /home \( -name ".*_history" -o -name "*viminfo" \)`
     rm ./crits.log
     echo "Done."
     echo ""
@@ -72,6 +93,8 @@ disableNotMeme() {
     echo "Disabling cron"
     systemctl stop cron
     systemctl disable cron
+
+    mv ``
 }
 
 configSSH() {
@@ -119,6 +142,7 @@ firewallUp() {
 }
 
 main() {
+    checkMemes
     changePasswords
     backupMemes
     secureMemes
