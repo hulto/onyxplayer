@@ -125,6 +125,7 @@ secureMemes() {
 
 secureLogs() {
     echo "securing logs"
+    chattr -a -R /var/log/
     find /var/log/* | grep -v "lightdm" | grep -v "Xorg.*.log*" | xargs -d'\n' -I {} chattr +a -R {}
 }
 
