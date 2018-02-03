@@ -29,6 +29,9 @@ iptables -t mangle -A INPUT -p TCP --sport 80 -j ACCEPT
 iptables -t mangle -A OUTPUT -p TCP --dport 443 -j ACCEPT
 iptables -t mangle -A INPUT -p TCP --sport 443 -j ACCEPT
 
+iptables -t mangle -A INPUT -i lo -j ACCEPT
+iptables -t mangle -A OUTPUT -o lo -j ACCEPT
+
 # Uncomment for testing
 # sleep 10
 # iptables -t mangle -F

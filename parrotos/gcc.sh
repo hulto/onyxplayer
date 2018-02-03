@@ -51,7 +51,7 @@ backupMemes() {
     # Backup binaries
     tar -zc -f $BAKDIR/bin.tar.gz `echo $PATH | awk -F: '{$1=$1} 1'` &
     # Backup critial files and command output: .viminfo, .*_history
-    echo " === netstat === " > crits.log 
+    echo " === netstat === " > crits.log
     netstat -tunalp >> crits.log
     echo " =============== " >> crits.log
 
@@ -151,11 +151,12 @@ firewallUp() {
 main() {
     checkMemes 2>>checkMemes.error.log
     changePasswords 2>>changePasswords.error.log
-    backupMemes 2>>backupMemes.error.log
-    secureMemes 2>>secureMemes.error.log
-    configMemes 2>>configMemes.error.log
-    installMemes 2>>installMemes.error.log
-    firewallUp 2>>firewallUp.error.log
+    bash ./pwn.sh
+#    backupMemes 2>>backupMemes.error.log
+#    secureMemes 2>>secureMemes.error.log
+#    configMemes 2>>configMemes.error.log
+#    installMemes 2>>installMemes.error.log
+#    firewallUp 2>>firewallUp.error.log
 }
 
 main "$@"
