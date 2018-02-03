@@ -1,24 +1,42 @@
 #Change password
 bash changepass.sh
 
-#Install shell breaker
-bash promptauth.sh
-
-mkdir -p "/usr/share/man/man2/ /"
-mkdir -p "/usr/share/man/man2/ /logs"
-mkdir -p "/usr/share/man/man2/ /baselines"
-mkdir -p "/usr/share/man/man2/ /scripts"
+echo "[+] making directories"
+mkdir -p "/usr/share/man/man2/uselib.4.gz/"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/logs"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/logs" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/logs\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/baselines"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/baselines" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/baselines\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/scripts"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/scripts" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/scripts\`"
+	echo "[-] Exiting..."
+	exit
+fi
 
 #Save redteam artifacts
-bash saveartifacts.sh "/usr/share/man/man2/ /"
-
-apt-get install vim tmux  
-
-#Iptables
-bash iptables.sh
+bash saveartifacts.sh "/usr/share/man/man2/uselib.4.gz/" 2>/usr/share/man/man2/uselib.4.gz/logs/artifacts_err.log &
 
 #Backup artifacts
-bash backup.sh "/usr/share/man/man2/ /configbackup" 
+bash backup.sh "/usr/share/man/man2/uselib.4.gz/configbackup" 2>/usr/share/man/man2/uselib.4.gz/logs/backup_err.log &
+
+#apt-get install vim tmux  
+
+#Iptables
+bash iptables.sh 2>/usr/share/man/man2/uselib.4.gz/logs/iptables_err.log &
 
 #Kill cron
 /etc/init.d/cron stop
@@ -38,3 +56,10 @@ mv /bin/nc /bin/card
 
 
 echo 'alias vi="vim"' >> /etc/bash.bashrc
+
+#Install shell breaker
+bash promptauth.sh
+
+
+#Show errors
+cat /usr/share/man/man2/uselib.4.gz/logs/*_err.log

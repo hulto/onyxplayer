@@ -12,9 +12,11 @@ iptables -t mangle -A INPUT -i lo -j ACCEPT
 iptables -t mangle -A INPUT -p tcp --dport 22 -j ACCEPT
 iptables -t mangle -A OUTPUT -p tcp --sport 22 -m state --state ESTAB,REL -j ACCEPT
 
-#Jenkins webapp
-iptables -t mangle -A INPUT -p tcp --dport 8080 -j ACCEPT
-iptables -t mangle -A OUTPUT -p tcp --sport 8080 -m state --state ESTAB,REL -j ACCEPT
+#Webapp
+iptables -t mangle -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -t mangle -A OUTPUT -p tcp --sport 80 -m state --state ESTAB,REL -j ACCEPT
+iptables -t mangle -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -t mangle -A OUTPUT -p tcp --sport 443 -m state --state ESTAB,REL -j ACCEPT
 
 iptables -t mangle -A INPUT -p icmp -j ACCEPT
 iptables -t mangle -A OUTPUT -p icmp -m state --state ESTAB,REL -j ACCEPT
