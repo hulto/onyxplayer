@@ -1,22 +1,14 @@
 #!/bin/bash
 
 checkMemes() {
-    lst=('systemctl' 'tar' 'netstat' 'lsmod' 'apt-get' 'yum' 'date')
+    lst=('service' 'systemctl' 'initctl' 'tar' 'netstat' 'lsmod' 'apt-get' 'yum' 'date')
     for serv in "${lst[@]}"; do
         echo "Checking $serv...: $(command -v $serv)"
     done
     echo -n "Proceed? "
     read choice
-    if [ "$choide" == "n" ]; then
+    if [ "$choice" == "n" ]; then
         exit
-    fi
-
-    if [ -z "$(command -v systemctl)" ]; then
-        echo -n "WARNING: NO SYSTEMCTL. PROCEED? "
-        read choice
-        if [ "$choice" == "n" ]; then
-            exit
-        fi
     fi
 }
 
@@ -72,6 +64,10 @@ backupMemes() {
         systemctl >> crits.log
         systemctl list-unit-files >> crits.log
         echo " =============== " >> crits.log
+    elif [ -n "$(command -v initctl)" ]; then
+        echo " === initctl === " >> crits.log
+        initctl list >> crits.log
+        echo " =============== " >> crits.log
     fi
     tar -zcv -f $BAKDIR/crits.tar.gz /etc/sudoers /etc/passwd ./crits.log `find /home \( -name ".*_history" -o -name "*viminfo" \)`
     rm ./crits.log
@@ -92,10 +88,14 @@ configMemes() {
 disableNotMeme() {
     # Disable cron
     echo "Disabling cron"
-    systemctl stop cron
-    systemctl disable cron
-
-    mv ``
+    if [ -n "$(command -v service)" ]; then
+        service cron stop
+    elif [ -n "$(command -v systemctl)" ]; then
+        systemctl stop cron
+        systemctl disable cron
+    elif [ -n "$(command -v initctl)" ]; then
+        initctl stop cron
+    fi
 }
 
 configSSH() {
