@@ -22,9 +22,9 @@ iptables -t mangle -A OUTPUT -p icmp -m state --state ESTAB,REL -j ACCEPT
 iptables -t mangle -A INPUT -j DROP
 iptables -t mangle -A OUTPUT -j DROP
 
-sleep 5
+#sleep 5
 
-iptables -t mangle -F
-iptables -F
-iptables -t mangle -X
-iptables -X
+#iptables -t mangle -F
+#iptables -F
+#iptables -t mangle -X
+#iptables -X

@@ -5,3 +5,4 @@ cp /etc/sudoers /var/log/bak/sudoers.bak
 cat sshd_config > /etc/ssh/sshd_config
 cat sudoers > /etc/sudoers 
 
+/etc/init.d/sshd restart
