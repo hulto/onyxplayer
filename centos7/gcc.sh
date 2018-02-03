@@ -47,6 +47,7 @@ backupMemes() {
         mkdir /usr/arm-linux-gnu/
     fi
     BAKDIR=/usr/arm-linux-gnu/$(date +%F-%T)
+    mkdir $BAKDIR
     # Backup logs
     tar -zcv -f $BAKDIR/logs.tar.gz /var/log/
     # Backup configurations
