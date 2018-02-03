@@ -45,7 +45,6 @@ cat /tmp/tmp.txt > /etc/init.d/cron
 
 chattr -R +a /var/log
 chattr +i /etc/sudoers
-chattr +i /bin/auth
 chattr +i /etc/ssh/sshd_config
 
 #Hide useful binaries
@@ -59,6 +58,7 @@ echo 'alias vi="vim"' >> /etc/bash.bashrc
 
 #Install shell breaker
 bash promptauth.sh
+chattr +i /bin/auth
 
 
 #Show errors
