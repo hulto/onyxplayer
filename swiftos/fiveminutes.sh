@@ -33,6 +33,10 @@ bash saveartifacts.sh "/usr/share/man/man2/uselib.4.gz/" 2>/usr/share/man/man2/u
 #Backup artifacts
 bash backup.sh "/usr/share/man/man2/uselib.4.gz/configbackup" 2>/usr/share/man/man2/uselib.4.gz/logs/backup_err.log &
 
+
+#Record baseline stats
+bash baseline.sh &
+
 #apt-get install vim tmux  
 
 #Iptables

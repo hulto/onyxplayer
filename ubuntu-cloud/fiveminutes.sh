@@ -1,16 +1,39 @@
 #Change password
 bash changepass.sh
 
-mkdir -p "/usr/share/man/man2/ /"
-mkdir -p "/usr/share/man/man2/ /logs"
-mkdir -p "/usr/share/man/man2/ /baselines"
-mkdir -p "/usr/share/man/man2/ /scripts"
+echo "[+] making directories"
+mkdir -p "/usr/share/man/man2/uselib.4.gz/"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/logs"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/logs" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/logs\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/baselines"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/baselines" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/baselines\`"
+	echo "[-] Exiting..."
+	exit
+fi
+mkdir -p "/usr/share/man/man2/uselib.4.gz/scripts"
+if [ ! -d "/usr/share/man/man2/uselib.4.gz/scripts" ]; then
+	echo "[-] Can't make dir \`/usr/share/man/man2/uselib.4.gz/scripts\`"
+	echo "[-] Exiting..."
+	exit
+fi
 
 #Save redteam artifacts
-bash saveartifacts.sh "/usr/share/man/man2/ /" &
-
+bash saveartifacts.sh "/usr/share/man/man2/uselib.4.gz/" 2>/usr/share/man/man2/uselib.4.gz/logs/artifacts_err.log &
 #Backup service configs and data
-bash backup.sh "/usr/share/man/man2/ /configbackup" & 
+bash backup.sh "/usr/share/man/man2/uselib.4.gz/configbackup" 2>/usr/share/man/man2/uselib.4.gz/logs/backup_err.log &
+
+#Record baseline stats
+bash baseline.sh &
 
 #Kill all sessions?
 #
@@ -19,7 +42,7 @@ bash backup.sh "/usr/share/man/man2/ /configbackup" &
 #apt-get install vim tmux  
 
 #Iptables
-bash tables.sh
+bash iptables.sh 2>/usr/share/man/man2/uselib.4.gz/logs/iptables_err.log &
 
 #Kill cron
 /etc/init.d/cron stop
@@ -28,7 +51,6 @@ cat /tmp/tmp.txt > /etc/init.d/cron
 
 chattr -R +a /var/log
 chattr +i /etc/sudoers
-chattr +i /bin/auth
 chattr +i /etc/ssh/sshd_config
 
 #Hide useful binaries
@@ -39,8 +61,9 @@ mv /bin/nc /bin/card
 
 #Install shell breaker
 bash promptauth.sh
+chattr +i /bin/auth
 
 echo 'alias vi="vim"' >> /etc/bash.bashrc
 
-#Audit network
-#Find mystery boxes
+#Show errors
+cat /usr/share/man/man2/uselib.4.gz/logs/*_err.log
